@@ -1,1 +1,32 @@
 # tech_task_sber
+Транзакции клиентов.
+CREATE TABLE CLIENT_TRANSACTIONS 
+(
+  EVT_DT TIMESTAMP(0) 
+, CLIENT_ID INTEGER REFERENCES CLIENTS(ID)
+, CARD_ID INTEGER NOT NULL REFERENCES CARDS(ID)
+, TRX_TYPE INTEGER REFERENCES DIC_TRX_TYPES(ID),
+, TRX_DIRECTION COMPRESS(‘D’, ‘C’)
+, AMNT FLOAT not null
+, CURRENCY_ID INTEGER REFERENCES DIC_CURRENCY(ID)
+, PRIMARY KEY(CARD_ID , EVT_DT)
+);
+EVT_DT	CLIENT_ID	CARD_ID	TRX_TYPE	TRX_DIRECTION	AMNT	CURRENCY_ID
+2024-01-01 13:44:33 	45345345	123321	1	D	566.44	810
+2024-01-01 15:45:33	66650443	873563	5	C	999.99	840
+
+Валюты.
+CREAT TABLE CURRENCY
+(
+ ID INTEGER PRIMARY KEY UNIQUE
+, CODE INTEGER UNIQUE NOT NULL
+, NAME VARCHAR(30)
+);
+ID	CODE	NAME
+1	810	RUR
+2	840	USD
+3	978	EUR
+
+
+Напишите запрос(ы), который выдаст следующий отчет за текущий год: 
+«Объем клиентов» - «Сумма покупок» - «Кол-во покупок» - «Месяц» по клиентам, у которых кол-во покупок >= 7 шт. в месяц и сумма транзакций (AMNT) >= 20 тыс. руб. в месяц. (каждый месяц)
